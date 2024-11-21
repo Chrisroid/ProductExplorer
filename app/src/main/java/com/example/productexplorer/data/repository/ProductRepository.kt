@@ -21,17 +21,30 @@ class ProductRepository @Inject constructor(
     fun getProducts(): Flow<Resource<List<Product>>> = flow {
         emit(Resource.Loading())
 
+        // Fetch local products first
         val localProducts = dao.getAllProducts()
-        emit(Resource.Loading(data = localProducts))
+        if (localProducts.isNotEmpty()) {
+            // Emit cached data
+            emit(Resource.Success(data = localProducts))
+        } else {
+            emit(Resource.Loading(data = null))
+        }
 
+        // Try fetching data from remote
         try {
             val remoteProducts = api.getProducts()
-            dao.deleteAllProducts()
-            dao.insertProducts(remoteProducts)
-            emit(Resource.Success(remoteProducts))
+
+            // Update local database after successful fetch
+            dao.run {
+                deleteAllProducts()
+                insertProducts(remoteProducts)
+            }
+
+            // Emit remote data
+            emit(Resource.Success(data = remoteProducts))
         } catch (e: IOException) {
             emit(Resource.Error(
-                message = "Network Error",
+                message = "No Internet Connection",
                 data = localProducts
             ))
         } catch (e: HttpException) {
@@ -45,16 +58,27 @@ class ProductRepository @Inject constructor(
     fun getProductDetails(id: Int): Flow<Resource<Product>> = flow {
         emit(Resource.Loading())
 
+        // Fetch the product locally
         val localProduct = dao.getProductById(id)
-        emit(Resource.Loading(data = localProduct))
+        if (localProduct != null) {
+            // Emit cached data if available
+            emit(Resource.Success(data = localProduct))
+        } else {
+            emit(Resource.Loading(data = null))
+        }
 
+        // Try fetching details from remote
         try {
             val remoteProduct = api.getProductDetails(id)
+
+            // Update local database after successful fetch
             dao.insertProduct(remoteProduct)
-            emit(Resource.Success(remoteProduct))
+
+            // Emit remote data
+            emit(Resource.Success(data = remoteProduct))
         } catch (e: IOException) {
             emit(Resource.Error(
-                message = "Network Error",
+                message = "No Internet Connection",
                 data = localProduct
             ))
         } catch (e: HttpException) {
