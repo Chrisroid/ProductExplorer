@@ -67,13 +67,16 @@ class ProductListFragment : Fragment() {
                 binding.swipeRefreshLayout.isRefreshing = resource is Resource.Loading
                 when (resource) {
                     is Resource.Loading -> {
+                        showShimmerEffect()
                         binding.progressBar.isVisible = true
                     }
                     is Resource.Success -> {
+                        hideShimmerEffect()
                         binding.progressBar.isVisible = false
                         resource.data?.let { adapter.updateData(it) }
                     }
                     is Resource.Error -> {
+                        hideShimmerEffect()
                         binding.progressBar.isVisible = false
                         Toast.makeText(
                             requireContext(),
@@ -84,5 +87,17 @@ class ProductListFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showShimmerEffect() {
+        binding.shimmerFrameLayout.visibility = View.VISIBLE
+        binding.shimmerFrameLayout.startShimmer()
+        binding.recyclerView.visibility = View.GONE
+    }
+
+    private fun hideShimmerEffect() {
+        binding.shimmerFrameLayout.stopShimmer()
+        binding.shimmerFrameLayout.visibility = View.GONE
+        binding.recyclerView.visibility = View.VISIBLE
     }
 }

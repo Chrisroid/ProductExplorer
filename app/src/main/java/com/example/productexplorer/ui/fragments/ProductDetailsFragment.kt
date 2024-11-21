@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -40,9 +41,12 @@ class ProductDetailsFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.selectedProduct.collect { product ->
                 product?.let {
+                    binding.productCategoryDetails.text = "Category: ${it.category}"
                     binding.productTitleDetails.text = it.title
                     binding.productPriceDetails.text = "$${it.price}"
                     binding.productDescriptionDetails.text = it.description
+                    binding.ratingBar.rating = it.rating.rate.toFloat()
+                    binding.productReviewNumberDetails.text = "(${it.rating.count} Reviews)"
                     Glide.with(requireContext())
                         .load(it.image)
                         .into(binding.productImageDetails)

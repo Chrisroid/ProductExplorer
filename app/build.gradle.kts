@@ -101,6 +101,9 @@ dependencies {
     //Navigation
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
+
+    //Shimmer Animation
+    implementation(libs.shimmer)
 }
 
 kapt {

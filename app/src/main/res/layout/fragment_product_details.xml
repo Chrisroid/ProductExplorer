@@ -23,40 +23,60 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Product Image -->
+            <TextView
+                android:id="@+id/productCategoryDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textSize="18sp" />
+
+
             <ImageView
                 android:id="@+id/productImageDetails"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:scaleType="centerCrop"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                android:scaleType="centerCrop" />
 
             <!-- Product Title -->
             <TextView
                 android:id="@+id/productTitleDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+                android:textStyle="bold" />
 
             <!-- Product Price -->
             <TextView
                 android:id="@+id/productPriceDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+                android:textStyle="bold" />
 
             <!-- Product Rating -->
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5" />
+
             <TextView
-                android:id="@+id/productRatingDetails"
+                android:id="@+id/productReviewNumberDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:layout_marginBottom="16dp" />
+                android:textStyle="italic"
+                android:layout_marginBottom="16dp"/>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DESCRIPTION"
+                android:textStyle="italic"
+                android:textSize="14sp" />
             <!-- Product Description -->
             <TextView
                 android:id="@+id/productDescriptionDetails"
