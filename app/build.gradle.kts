@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
+    id("kotlin-kapt")
 }
 
 android {
@@ -15,6 +18,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
@@ -45,4 +52,48 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Hilt for Dependency Injection
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+
+    // Retrofit for networking
+    implementation(libs.retrofit)
+
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    // Moshi for JSON parsing (optional, replace with Gson if preferred)
+    implementation(libs.moshi)
+    implementation(libs.converter.moshi)
+    kapt(libs.moshi.kotlin.codegen)
+
+    // Gson for JSON parsing (if you prefer Gson over Moshi)
+     implementation(libs.gson)
+     implementation(libs.converter.gson)
+
+    // Room for local database
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    // Kotlin Coroutines and Flow
+    implementation(libs.kotlinx.coroutines.android)
+
+    // Lifecycle components for ViewModel and LiveData
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    // Testing
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit.v115)
+    androidTestImplementation(libs.androidx.espresso.core.v351)
+
+    // Hilt testing
+    androidTestImplementation(libs.hilt.android.testing)
+    kaptAndroidTest(libs.hilt.android.compiler.v248)
+}
+
+kapt {
+    correctErrorTypes = true
 }
