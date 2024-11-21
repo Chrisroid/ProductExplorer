@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class ProductListFragment : Fragment() {
 
     private lateinit var binding: FragmentProductListBinding
-    private val viewModel: ProductViewModel by viewModels()
+    private val viewModel: ProductViewModel by activityViewModels()
 
     private lateinit var adapter: ProductListAdapter
 
@@ -52,11 +53,13 @@ class ProductListFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = ProductListAdapter(emptyList()) { product ->
+            viewModel.selectProduct(product)
             findNavController().navigate(R.id.action_productListFragment_to_productDetailsFragment)
         }
         binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.recyclerView.adapter = adapter
     }
+
 
     private fun observeProducts() {
         lifecycleScope.launchWhenStarted {

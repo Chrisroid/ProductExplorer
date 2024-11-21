@@ -1,5 +1,6 @@
 package com.example.productexplorer.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.productexplorer.data.repository.ProductRepository
@@ -19,8 +20,8 @@ class ProductViewModel @Inject constructor(
     private val _products = MutableStateFlow<Resource<List<Product>>>(Resource.Loading())
     val products = _products.asStateFlow()
 
-    private val _productDetails = MutableStateFlow<Resource<Product>>(Resource.Loading())
-    val productDetails = _productDetails.asStateFlow()
+    private val _selectedProduct = MutableStateFlow<Product?>(null)
+    val selectedProduct = _selectedProduct.asStateFlow()
 
     init {
         fetchProducts()
@@ -34,13 +35,9 @@ class ProductViewModel @Inject constructor(
         }
     }
 
-    fun fetchProductDetails(productId: Int) {
-        viewModelScope.launch {
-            repository.getProductDetails(productId).collect { result ->
-                _productDetails.value = result
-            }
-        }
+    fun selectProduct(product: Product) {
+        _selectedProduct.value = product
+        Log.e("ViewModel", product.toString())
     }
-
 
 }

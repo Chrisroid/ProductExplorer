@@ -30,17 +30,23 @@ class ProductListAdapter(
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = products[position]
+
+        // Bind the product details to the views
         holder.productName.text = product.title
         holder.productPrice.text = "$${product.price}"
         holder.productRating.text = "⭐ ${product.rating.rate}"
+
+        // Load the product image using Glide
         Glide.with(holder.itemView.context)
             .load(product.image)
             .into(holder.productImage)
 
+        // Set up the click listener for the entire item view
         holder.itemView.setOnClickListener {
-            onProductClicked(product)
+            onProductClicked(product) // Call the callback with the clicked product
         }
     }
+
 
     override fun getItemCount() = products.size
 
