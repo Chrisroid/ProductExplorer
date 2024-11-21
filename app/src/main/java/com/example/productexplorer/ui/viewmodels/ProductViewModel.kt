@@ -26,12 +26,21 @@ class ProductViewModel @Inject constructor(
         fetchProducts()
     }
 
-    private fun fetchProducts() {
+    fun fetchProducts() {
         viewModelScope.launch {
             repository.getProducts().collect { result ->
                 _products.value = result
             }
         }
     }
+
+    fun fetchProductDetails(productId: Int) {
+        viewModelScope.launch {
+            repository.getProductDetails(productId).collect { result ->
+                _productDetails.value = result
+            }
+        }
+    }
+
 
 }
