@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -46,6 +47,8 @@ class ProductDetailsFragment : Fragment() {
                     binding.productPriceDetails.text = "$${it.price}"
                     binding.productDescriptionDetails.text = it.description
                     binding.ratingBar.rating = it.rating.rate.toFloat()
+                    val ratingDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.rating_drawable)
+//                    binding.ratingBar.progressDrawable = ratingDrawable
                     binding.productReviewNumberDetails.text = "(${it.rating.count} Reviews)"
                     Glide.with(requireContext())
                         .load(it.image)
