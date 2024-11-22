@@ -116,6 +116,9 @@ dependencies {
     implementation(libs.shimmer)
 
     testImplementation (libs.kotest.assertions.core)
+    testImplementation(libs.mockk)
+    testImplementation (libs.robolectric)
+
 }
 
 kapt {

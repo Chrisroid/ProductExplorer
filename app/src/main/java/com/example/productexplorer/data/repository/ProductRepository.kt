@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ProductRepository @Inject constructor(
+open class ProductRepository @Inject constructor(
     private val api: ProductApi,
     private val dao: ProductDao
 ) {

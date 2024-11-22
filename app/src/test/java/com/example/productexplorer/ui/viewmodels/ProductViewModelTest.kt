@@ -1,42 +1,60 @@
 package com.example.productexplorer.ui.viewmodels
 
+import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import app.cash.turbine.test
+import com.example.productexplorer.data.local.ProductDao
+import com.example.productexplorer.data.remote.ProductApi
 import com.example.productexplorer.data.repository.ProductRepository
 import com.example.productexplorer.model.Product
 import com.example.productexplorer.model.Rating
 import com.example.productexplorer.utils.Resource
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.junit.Assert.*
-
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
+import org.mockito.Mockito.clearInvocations
+import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
+import java.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
+@RunWith(RobolectricTestRunner::class)
 @ExperimentalCoroutinesApi
-@RunWith(MockitoJUnitRunner::class)
 class ProductViewModelTest {
 
     @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+    val instantExecutorRule = InstantTaskExecutorRule()
 
     private val testDispatcher = StandardTestDispatcher()
 
     @Mock
-    private lateinit var mockRepository: ProductRepository
-
+    private lateinit var repository: ProductRepository
     private lateinit var viewModel: ProductViewModel
+    @Mock
+    private lateinit var mockDao: ProductDao
 
-    private val mockProducts = listOf(
+    @Mock
+    private lateinit var mockApi: ProductApi
+
+    private val sampleProducts = listOf(
         Product(
             id = 1,
             title = "Product 1",
@@ -59,32 +77,93 @@ class ProductViewModelTest {
 
     @Before
     fun setup() {
+        MockitoAnnotations.openMocks(this)
         Dispatchers.setMain(testDispatcher)
-        viewModel = ProductViewModel(mockRepository)
+
+        mockDao = mockk(relaxed = true)
+        mockApi = mockk(relaxed = true)
+
+        repository = mockk(relaxed = true) // Mock the repository
+        viewModel = ProductViewModel(repository)
+
+        // Mock database behavior
+        coEvery { mockDao.getAllProducts() } returns sampleProducts
+
+        // Mock API behavior
+        coEvery { mockApi.getProducts() } returns sampleProducts
     }
+
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+//        clearInvocations(mockApi, mockDao)
+    }
+
+
+
+    @Test
+    fun `selectProduct updates selectedProduct state`() = runTest {
+        // Given
+        val product = sampleProducts[0]
+
+        // When
+        viewModel.selectProduct(product)
+
+        // Then
+        viewModel.selectedProduct.test {
+            assertEquals(product, awaitItem())
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
-    fun `fetchProducts updates products state with repository data`() = runTest {
-        val mockResource = Resource.Success(mockProducts)
-        whenever(mockRepository.getProducts()).thenReturn(kotlinx.coroutines.flow.flowOf(mockResource))
+    fun `fetchProducts updates products state to success`() = runTest {
+        // Given: The repository emits a successful resource with sample products
+        val successResource = Resource.Success(sampleProducts)
+        coEvery { repository.getProducts() } returns flowOf(successResource) // Mock the repository call
 
+        // When: fetchProducts is called
         viewModel.fetchProducts()
-        testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(mockResource, viewModel.products.value)
+        // Then: Verify the products state updates correctly
+        viewModel.products.test {
+            assertEquals(Resource.Loading<List<Product>>(), awaitItem()) // Initial state
+            assertEquals(successResource, awaitItem()) // Emitted state from the repository
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 
     @Test
-    fun `selectProduct updates selected product state`() {
-        val selectedProduct = mockProducts.first()
+    fun `fetchProducts updates products state to error`() = runTest {
+        // Given: The repository emits an error resource
+        val errorResource = Resource.Error<List<Product>>("Error fetching products")
+        coEvery { repository.getProducts() } returns flowOf(errorResource)
 
-        viewModel.selectProduct(selectedProduct)
+        // When: fetchProducts is called
+        viewModel.fetchProducts()
 
-        assertEquals(selectedProduct, viewModel.selectedProduct.value)
+        // Then: Verify the products state updates correctly
+        viewModel.products.test {
+            assertEquals(Resource.Loading<List<Product>>(), awaitItem()) // Initial state
+            assertEquals(errorResource, awaitItem()) // Emitted error state
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `fetchProducts updates products state to loading`() = runTest {
+        // Given: The repository emits a loading resource
+        val loadingResource = Resource.Loading<List<Product>>()
+        coEvery { repository.getProducts() } returns flowOf(loadingResource)
+
+        // When: fetchProducts is called
+        viewModel.fetchProducts()
+
+        // Then: Verify the products state updates correctly
+        viewModel.products.test(timeout = 5.seconds) { // Extend timeout if needed
+            assertEquals(Resource.Loading<List<Product>>(), awaitItem()) // Initial state
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 }
