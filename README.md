@@ -14,6 +14,10 @@
 ### Details Screen
 ![Details Screen](https://github.com/user-attachments/assets/4c263b8e-548e-4497-9d9e-f00985642b6d)
 
+## VIDEO
+https://github.com/user-attachments/assets/889f0c02-42e3-49a0-91a5-23fd0d604627
+
+
 - Displays detailed information about a selected product.
 
 ---
