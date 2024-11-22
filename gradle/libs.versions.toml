@@ -2,12 +2,14 @@
 agp = "8.5.1"
 androidxJunit = "1.1.5"
 converterMoshi = "2.9.0"
+coreTesting = "2.2.0"
 espressoCoreVersion = "3.5.1"
 glide = "4.16.0"
 gson = "2.11.0"
 hiltAndroid = "2.52"
 hiltAndroidCompiler = "2.48"
 hiltAndroidTesting = "2.48"
+kotestAssertionsCore = "5.5.5"
 kotlin = "1.9.0"
 coreKtx = "1.15.0"
 junit = "4.13.2"
@@ -15,10 +17,14 @@ junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 kotlinxCoroutinesAndroid = "1.8.1"
+kotlinxCoroutinesTest = "1.7.3"
 lifecycleViewmodelKtx = "2.8.7"
 material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
+mockitoCore = "4.11.0"
+mockitoKotlin = "4.1.0"
+mockwebserver = "4.11.0"
 moshi = "1.15.0"
 navigationFragment = "2.8.4"
 okhttp = "4.12.0"
@@ -27,9 +33,11 @@ roomRuntime = "2.6.1"
 shimmer = "0.5.0"
 swiperefreshlayout = "1.1.0"
 navigationFragmentVersion = "2.8.4"
+turbineVersion = "0.12.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "coreTesting" }
 androidx-espresso-core-v351 = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCoreVersion" }
 androidx-junit-v115 = { module = "androidx.test.ext:junit", version.ref = "androidxJunit" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleViewmodelKtx" }
@@ -39,6 +47,7 @@ androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+app-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbineVersion" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterMoshi" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
@@ -51,11 +60,16 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotestAssertionsCore" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockitoKotlin" }
+mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "mockwebserver" }
 moshi = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshi" }
 moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }

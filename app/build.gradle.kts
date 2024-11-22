@@ -61,9 +61,9 @@ dependencies {
 
     // Retrofit for networking
     implementation(libs.retrofit)
-
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
+    testImplementation(libs.mockwebserver)
 
     // Moshi for JSON parsing (optional, replace with Gson if preferred)
     implementation(libs.moshi)
@@ -78,6 +78,8 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    // Debug dependencies for Room
+    kaptTest (libs.androidx.room.compiler)
 
     // Kotlin Coroutines and Flow
     implementation(libs.kotlinx.coroutines.android)
@@ -88,8 +90,16 @@ dependencies {
 
     // Testing
     testImplementation(libs.junit)
+    // Mocking and Flow Testing
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.mockito.kotlin)
+    testImplementation (libs.app.turbine)
     androidTestImplementation(libs.androidx.junit.v115)
     androidTestImplementation(libs.androidx.espresso.core.v351)
+    testImplementation (libs.androidx.core.testing)
+
+    //Coroutine Test
+    testImplementation(libs.kotlinx.coroutines.test)
 
     // Hilt testing
     androidTestImplementation(libs.hilt.android.testing)
@@ -104,6 +114,8 @@ dependencies {
 
     //Shimmer Animation
     implementation(libs.shimmer)
+
+    testImplementation (libs.kotest.assertions.core)
 }
 
 kapt {
